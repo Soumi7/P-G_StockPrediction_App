@@ -1,0 +1,5 @@
+jsonpickle
+tensorflow 
+numpy
+flask
+Pillow
