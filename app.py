@@ -1,60 +1,27 @@
-from importlib import import_module
-import os
-import jsonpickle
-from flask import Flask,Response , request , flash , url_for,jsonify
-import logging
-from logging.config import dictConfig
 import numpy as np
-from PIL import Image
-from tensorflow.keras.models import load_model
-from tensorflow.keras.preprocessing.image import load_img, img_to_array
-from flask import Flask 
-from tensorflow.keras.preprocessing import image
+from flask import Flask, request, jsonify, render_template
+import pickle
+
 app = Flask(__name__)
+model = pickle.load(open('model.pkl', 'rb'))
 
-@app.route('/') 
-def hello_world():
-    return "Hello, World!"
+@app.route('/')
+def home():
+    return render_template('index.html')
 
-@app.route('/classifier/run',methods=['POST'])
-def classify():
-    app.logger.debug('Running classifier')
-    upload = request.files['data']
-    #load_image() is to process image : 
-    image = load_image(upload)
-    print('image ready')
-    classifier = load_model('my_model_multiclass10.h5') #load the model that was created using cnn_multiclass.py
-    result = classifier.predict(image) # returns array
+@app.route('/predict',methods=['POST'])
+def predict():
+    '''
+    For rendering results on HTML GUI
+    '''
+    int_features = [int(x) for x in request.form.values()]
+    final_features = [np.array(int_features)]
+    prediction = model.predict(final_features)
 
-    if result[0][0] == 1:
-    	prediction = 'bridge' #predictions in array are in alphabetical order
-    elif result[0][1] == 1:
-    	prediction = 'childspose'
-    elif result[0][2] == 1:
-        prediction = 'downwarddog'
-    elif result[0][3] == 1:
-        prediction = 'mountain'
-    elif result[0][4] == 1:
-        prediction = 'plank'
-    elif result[0][5] == 1:
-        prediction = 'seatedforwardbend'
-    elif result[0][6] == 1:
-        prediction = 'tree'
-    elif result[0][7] == 1:
-        prediction = 'trianglepose'
-    elif result[0][8] == 1:
-        prediction = 'warrior1'
-    elif result[0][9] == 1:
-        prediction = 'warrior2'
-    return prediction
+    output = round(prediction[0], 2)
+
+    return render_template('index.html', prediction_text='Employee Salary should be $ {}'.format(output))
 
 
-def load_image(filename):    
-    test_image = image.load_img(filename, target_size = (64, 64))
-    test_image = image.img_to_array(test_image)
-    test_image = np.expand_dims(test_image, axis = 0)
-    return test_image
-
-if __name__ == '__main__':
-    #load_model()  # load model at the beginning once only
-    app.run(host='0.0.0.0', port=80)
+if __name__ == "__main__":
+    app.run(debug=True)
