@@ -19,7 +19,7 @@
      <!-- Main Input For Receiving Query to our ML -->
     <form action="{{ url_for('predict')}}"method="post">
     	<input type="text" name="Date" placeholder="Date" required="required" />
-        <input type="text" name="Product name" placeholder="Product name" required="required" />
+        
 		<input type="text" name="Product Group" placeholder="Product Group" required="required" />
 
         <button type="submit" class="btn btn-primary btn-block btn-large">Predict</button>
