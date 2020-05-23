@@ -9,7 +9,7 @@ from wwo_hist import retrieve_hist_data
 from pycaret.regression import *
 
 app = Flask(__name__)
-model = pickle.load(open('model.pkl', 'rb'))
+#model = pickle.load(open('model.pkl', 'rb'))
 
 @app.route('/')
 def home():
@@ -22,6 +22,7 @@ def predict():
     '''
     int_features = [x for x in request.form.values()]
     print(int_features)
+    
     date = int_features[0]
     converted_datetime=pd.to_datetime(date).date()
 
@@ -63,22 +64,22 @@ def predict():
 
 
 
-    frequency = 24
-    start_date = start_date
-    end_date = end_date
-    api_key = '12b2c18a34194a8ca93113127200405'
-    location_list = ['Mlawa']
-    hist_weather_data = retrieve_hist_data(api_key,
-                                            location_list,
-                                            start_date,
-                                            end_date,
-                                            frequency,
-                                            location_label = False,
-                                            export_csv = True,
-                                            store_df = True)
+    #frequency = 24
+    #start_date = start_date
+    #end_date = end_date
+    #api_key = '12b2c18a34194a8ca93113127200405'
+    #location_list = ['Mlawa']
+    #hist_weather_data = retrieve_hist_data(api_key,
+                                            #location_list,
+                                            #start_date,
+                                            #end_date,
+                                            #frequency,
+                                            #location_label = False,
+                                            #export_csv = True,
+                                            #store_df = True)
 
     
-    monthly_weather_data=pd.read_csv("Mlawa.csv")
+    monthly_weather_data=pd.read_csv("Month_Weather_data.csv")
 
     monthly_weather_data=monthly_weather_data.drop(["date_time","totalSnow_cm","sunHour","uvIndex.1","uvIndex","moon_illumination","moonrise","moonset","sunrise","DewPointC","sunset","WindChillC","WindGustKmph","precipMM","pressure","visibility","winddirDegree","windspeedKmph","tempC"],axis=1)
 
@@ -125,9 +126,13 @@ def predict():
         for key,value in data.iteritems():
             values.append(value.mean())
             print(key)
-            return values
+        return values
 
     monthly_averages=np.around(mean_data(monthly_weather_data),2)
+
+    print("monthly_averages")
+    
+
     monthly_averages[2]=cat_heat(monthly_averages[2])
     monthly_averages[3]=cat_cloud(monthly_averages[3])
         
@@ -141,15 +146,19 @@ def predict():
 
     prediction=predict_model(loaded_model, data= unseen_data.head(5))
 
+    print(prediction)
+
     output = prediction
-    print(jsonify(output))
+    
     s=""
 
-    for row in output:
+    for index,row in output.iterrows():
         s+='Quantity of product {} predicted is  {}\n'.format(row['name'],row['Label'])
 
 
     return render_template('index.html', prediction_text=s)
+
+
 
 @app.route('/predict_api',methods=['POST'])
 def predict_api():
