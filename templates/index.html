@@ -16,7 +16,7 @@
  <div class="login">
   <h1>Weather Based Stock Prediction</h1>
   
-  <h6>"The Products are : ALCOHOL ,  BREAD  , CHEMISTRY , CHEWING_GUM_LOLIPOPS ,  CHIPS_FLAKES  ,  CIGARETTES  ,  COFFEE TEA , DAIRY_CHESSE  ,  DRINK_JUICE  ,  GENERAL  ,  GENERAL_FOOD , GENERAL_ITEMS  ,  GROATS_RICE_PASTA  ,  ICE_CREAMS_FROZEN,  KETCH_CONCETRATE_MUSTARD_MAJO_HORSERADISH , OCCASIONAL  ,  POULTRY  ,  SPICES  ,  SWEETS  ,  TABLETS  ,  VEGETABLES")</h6>
+  
 
      <!-- Main Input For Receiving Query to our ML -->
     <form action="{{ url_for('predict')}}"method="post">
@@ -29,7 +29,7 @@
 
    <br>
    <br>
-   {{ prediction_text }}
+   <h6> {{ prediction_text }}</h6>
 
  </div>
 

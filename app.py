@@ -81,13 +81,13 @@ def predict():
     api_key = '12b2c18a34194a8ca93113127200405'
     location_list = ['Mlawa']
     hist_weather_data = retrieve_hist_data(api_key,
-                                        location_list,
-                                        start_date,
-                                        end_date,
-                                        frequency,
-                                        location_label = False,
-                                        export_csv = True,
-                                        store_df = True)
+                                            location_list,
+                                            start_date,
+                                            end_date,
+                                            frequency,
+                                            location_label = False,
+                                            export_csv = True,
+                                            store_df = True)
 
     #the weather data is stored in the file "Mlawa.csv", hence we read from that 
     monthly_weather_data=pd.read_csv("Mlawa.csv")
@@ -108,7 +108,7 @@ def predict():
             for key,value in data.iteritems():
                 values.append(value.mean())
                 print(key)
-        return values
+            return values
 
         #categorising the heat_index data into three different types
         def cat_heat(heatindex):
@@ -139,7 +139,7 @@ def predict():
 
     monthly_weather_data=final_weather(monthly_weather_data)
         
-    # print(monthly_weather_data)
+    print(monthly_weather_data)
 
     final_data=pd.read_csv("GROUP_OF_ITEMS_FINAL/"+group.upper()+".csv")
 
@@ -187,29 +187,16 @@ def predict():
     pred['Label']=final_sales
 
 
-    
-    '''
-    fmt = '{:<8}{:<80}{}'
-
-
-    print(fmt.format('', 'NAME', 'QUANTITY'))
-    for i, (name, sales) in enumerate(zip(pred["name"], final_sales )):
-        print(fmt.format(i, name, sales))
-
-    print(prediction)
-
-    '''
-
-
 
     output = pred
     
     s=""
 
     for index,row in output.iterrows():
-        s+='Quantity of product {} predicted is  {}\n'.format(row['name'],row['Label'])
+        s+='Quantity of product {} predicted is  {}.'.format(row['name'],row['Label'])
+        s+="\n"
 
-
+    print(s)
     return render_template('index.html', prediction_text=s)
 
 
