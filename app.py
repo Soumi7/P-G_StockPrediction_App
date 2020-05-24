@@ -103,39 +103,39 @@ def predict():
         values=[]
         monthly_averages=[]
 
-    def mean_data(data):
-        values=[]
-        for key,value in data.iteritems():
-            values.append(value.mean())
-            print(key)
+        def mean_data(data):
+        
+            for key,value in data.iteritems():
+                values.append(value.mean())
+                print(key)
         return values
 
-    #categorising the heat_index data into three different types
-    def cat_heat(heatindex):
-        if heatindex < -2:
-            return (0)
-        elif heatindex >=-1 and heatindex<=14:
-            return (1)
-        else:
-            return (2)   
+        #categorising the heat_index data into three different types
+        def cat_heat(heatindex):
+            if heatindex < -2:
+                return (0)
+            elif heatindex >=-1 and heatindex<=14:
+                return (1)
+            else:
+                return (2)   
 
 
-    #categorising the cloud cover into 4 different types
-    def cat_cloud(cloudcover):
-        if cloudcover < 25:
-            return(0)
-        elif cloudcover >=25 and cloudcover<50:
-            return(1)
-        elif cloudcover >=50 and cloudcover<75:
-            return(1)    
-        else:
-            return(3)
+        #categorising the cloud cover into 4 different types
+        def cat_cloud(cloudcover):
+            if cloudcover < 25:
+                return(0)
+            elif cloudcover >=25 and cloudcover<50:
+                return(1)
+            elif cloudcover >=50 and cloudcover<75:
+                return(1)    
+            else:
+                return(3)
 
-    monthly_averages=np.around(mean_data(monthly_weather_data),2)
-    monthly_averages[2]=cat_heat(monthly_averages[2])
-    monthly_averages[3]=cat_cloud(monthly_averages[3])
+        monthly_averages=np.around(mean_data(monthly_weather_data),2)
+        monthly_averages[2]=cat_heat(monthly_averages[2])
+        monthly_averages[3]=cat_cloud(monthly_averages[3])
 
-    return monthly_averages
+        return monthly_averages
 
     monthly_weather_data=final_weather(monthly_weather_data)
         
