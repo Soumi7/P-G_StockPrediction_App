@@ -194,7 +194,7 @@ def predict():
 
     for index,row in output.iterrows():
         s+='Quantity of product {} predicted is  {}.'.format(row['name'],row['Label'])
-        s+="\n"
+        s+="\n\n\n"
 
     print(s)
     return render_template('index.html', prediction_text=s)
